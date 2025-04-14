@@ -36,7 +36,7 @@ pipeline{
                               sh '''
                                 unset DOCKER_TLS_VERIFY
                                 unset DOCKER_CERT_PATH
-                                docker build -t registry:5000/my-app:${BUILD_NUMBER} app
+                                docker build -t registry:5000/my-app:${BUILD_NUMBER} -f Dockerfile app
                               '''
                 } 
             }
