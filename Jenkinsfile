@@ -3,6 +3,7 @@ pipeline{
     tools {
         jdk 'jdk-17'
         maven 'maven-3.8'
+        dockerTool 'docker-1'
     }
     environment {
         IMAGE_NAME = "registry:5000/my-app"
