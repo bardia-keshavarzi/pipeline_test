@@ -35,7 +35,7 @@ pipeline{
                         'DOCKER_CERT_PATH=',
                         'DOCKER_HOST=unix:///var/run/docker.sock'
                     ]) {
-                        image = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
+                        sh 'docker build -t registry:5000/my-app:${BUILD_NUMBER} .'
                     }
                 } 
             }
