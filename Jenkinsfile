@@ -30,10 +30,17 @@ pipeline{
         stage("build docker image"){
             steps {
                 script {
-                    image = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
+                    withEnv([
+                        'DOCKER_TLS_VERIFY=',
+                        'DOCKER_CERT_PATH=',
+                        'DOCKER_HOST=unix:///var/run/docker.sock'
+                    ]) {
+                        image = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
+                    }
                 } 
             }
         }
+        
         stage("push docker image"){
             steps {
                 script {
