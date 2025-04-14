@@ -19,6 +19,13 @@ pipeline{
                 sh 'mvn clean package'    
             }
         }
+        stage('Check Docker') {
+            steps {
+                script {
+                    echo "Docker object class: ${docker.getClass()}"
+                }
+            }
+        }
         stage("build docker image"){
             steps {
                 script {
