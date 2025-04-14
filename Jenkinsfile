@@ -19,7 +19,7 @@ pipeline{
                         [$class: 'RelativeTargetDirectory', relativeTargetDir: 'app']
                     ]
                 ])
-                sh 'mvn clean package'    
+                sh 'cd app && mvn clean package'    
             }
         }
         stage('Check Docker') {
