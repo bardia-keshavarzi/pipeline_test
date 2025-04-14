@@ -30,13 +30,11 @@ pipeline{
         stage("build docker image"){
             steps {
                 script {
-                    withEnv([
-                        'DOCKER_TLS_VERIFY=0',
-                        'DOCKER_CERT_PATH=',
-                        'DOCKER_HOST=unix:///var/run/docker.sock'
-                    ]) {
-                        sh 'docker build -t registry:5000/my-app:${BUILD_NUMBER} .'
-                    }
+                              sh '''
+                                unset DOCKER_TLS_VERIFY
+                                unset DOCKER_CERT_PATH
+                                docker build -t registry:5000/my-app:${BUILD_NUMBER} .
+                              '''
                 } 
             }
         }
