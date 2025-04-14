@@ -31,7 +31,7 @@ pipeline{
             steps {
                 script {
                     withEnv([
-                        'DOCKER_TLS_VERIFY=',
+                        'DOCKER_TLS_VERIFY=0',
                         'DOCKER_CERT_PATH=',
                         'DOCKER_HOST=unix:///var/run/docker.sock'
                     ]) {
@@ -40,7 +40,7 @@ pipeline{
                 } 
             }
         }
-        
+
         stage("push docker image"){
             steps {
                 script {
