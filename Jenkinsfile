@@ -11,11 +11,14 @@ pipeline{
     stages{
         stage("build java code"){
             steps{
-                checkout([$class: 'GitSCM',
-                   branches: [[name: '*/master']],
-                   userRemoteConfigs: [[url: 'https://github.com/jabedhasan21/java-hello-world-with-maven']]
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/master']],
+                    userRemoteConfigs: [[url: 'https://github.com/jabedhasan21/java-hello-world-with-maven']],
+                    extensions: [
+                        [$class: 'RelativeTargetDirectory', relativeTargetDir: 'app']
+                    ]
                 ])
-
                 sh 'mvn clean package'    
             }
         }
