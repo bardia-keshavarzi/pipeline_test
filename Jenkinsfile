@@ -23,6 +23,7 @@ pipeline{
             steps {
                 script {
                     echo "Docker object class: ${docker.getClass()}"
+                    sh 'whoami'
                 }
             }
         }
