@@ -36,7 +36,8 @@ pipeline{
                     def Image = docker.build("${IMAGE_NAME}:${BUILD_NUMBER}", "-f Dockerfile ./app")
                     docker.withRegistry('http://localhost:5000') {
                         image.push()
-                } 
+                    } 
+                }
             }
         }
     }
