@@ -33,9 +33,9 @@ pipeline{
         stage("build docker image"){
             steps {
                 script {
-                    def Image = docker.build("${IMAGE_NAME}:${BUILD_NUMBER}", "-f Dockerfile ./app")
+                    def builtimage = docker.build("${IMAGE_NAME}:${BUILD_NUMBER}", "-f Dockerfile ./app")
                     docker.withRegistry('http://localhost:5000') {
-                        image.push()
+                        builtimage.push()
                     } 
                 }
             }
