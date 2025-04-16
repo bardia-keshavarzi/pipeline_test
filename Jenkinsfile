@@ -5,8 +5,8 @@ pipeline{
         maven 'maven-3.8'
     }
     environment {
-        IMAGE_NAME = "registry:5000/my-app"
-        IMAGE_TAG = "${env.BUILD_NUMBER}"
+        IMAGE_NAME = "localhost:5000/my-app"
+        IMAGE_TAG = "${BUILD_NUMBER}"
     }
     stages{
         stage("build java code"){
@@ -33,11 +33,7 @@ pipeline{
         stage("build docker image"){
             steps {
                 script {
-                              sh '''
-                                unset DOCKER_TLS_VERIFY
-                                unset DOCKER_CERT_PATH
-                                docker build -t localhost:5000/my-app:${BUILD_NUMBER} -f Dockerfile app
-                              '''
+                    Image = docker.build("${IMAGE_NAME}:${BUILD_NUMBER}", "-f Dockerfile ./app")
                 } 
             }
         }
