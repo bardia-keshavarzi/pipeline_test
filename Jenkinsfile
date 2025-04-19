@@ -33,7 +33,7 @@ pipeline{
         }
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sq1') { /
+                withSonarQubeEnv('sq1') { 
                     
                     sh 'cd app && mvn sonar:sonar \
                         -Dsonar.projectKey=${PROJECT_NAME} \
@@ -53,7 +53,7 @@ pipeline{
         stage("build docker image"){
             steps {
                 script {
-                    def builtimage = docker.build("${IMAGE_NAME}:${BUILD_NUMBER}", "-f Dockerfile ./app")
+                    def builtimage = docker.build("${IMAGE_NAME}:${BUILD_NUMBER}","-f Dockerfile ./app")
                     docker.withRegistry('http://localhost:5000') {
                         builtimage.push()
                     } 
