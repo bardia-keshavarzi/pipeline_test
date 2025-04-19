@@ -37,8 +37,7 @@ pipeline{
                     
                     sh 'cd app && mvn sonar:sonar \
                         -Dsonar.projectKey=${PROJECT_NAME} \
-                        -Dsonar.projectName=${PROJECT_NAME} \
-                    '
+                        -Dsonar.projectName=${PROJECT_NAME}' 
                 }
             }
         }
