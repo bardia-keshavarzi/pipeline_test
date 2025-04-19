@@ -7,6 +7,7 @@ pipeline{
     environment {
         IMAGE_NAME = "localhost:5000/my-app"
         IMAGE_TAG = "${BUILD_NUMBER}"
+        PROJECT_NAME = "test-1"
     }
     stages{
         stage("build java code"){
@@ -23,13 +24,33 @@ pipeline{
             }
         }
         stage('Check Docker') {
-            steps {
+            steps { 
                 script {
                     echo "Docker object class: ${docker.getClass()}"
                     sh 'whoami'
                 }
             }
         }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sq1') { /
+                    
+                    sh 'cd app && mvn sonar:sonar \
+                        -Dsonar.projectKey=${PROJECT_NAME} \
+                        -Dsonar.projectName=${PROJECT_NAME} \
+                    '
+                }
+            }
+        }
+        
+        stage('Quality Gate Check') {
+            steps {
+                timeout(time: 2, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+            
         stage("build docker image"){
             steps {
                 script {
