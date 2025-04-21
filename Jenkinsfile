@@ -39,17 +39,13 @@ pipeline{
                         -Dsonar.projectKey=${PROJECT_NAME} \
                         -Dsonar.projectName=${PROJECT_NAME}' 
                 }
-            }
-        }
-        
-        stage('Quality Gate Check') {
-            steps {
-                timeout(time: 15, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
+                    timeout(time: 15, unit: 'MINUTES') {
+
+                     waitForQualityGate abortPipeline: true
                 }
             }
         }
-            
+                   
         stage("build docker image"){
             steps {
                 script {
