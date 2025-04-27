@@ -16,7 +16,7 @@ pipeline{
                 checkout([
                     $class: 'GitSCM',
                     branches: [[name: '*/master']],
-                    userRemoteConfigs: [[url: 'https://github.com/jabedhasan21/java-hello-world-with-maven']],
+                    userRemoteConfigs: [[url: 'https://github.com/bardia-keshavarzi/java-hello-world-with-maven.git']],
                     extensions: [
                         [$class: 'RelativeTargetDirectory', relativeTargetDir: 'app']
                     ]
@@ -37,6 +37,15 @@ pipeline{
 
                      waitForQualityGate abortPipeline: true
                 }
+            }
+        }
+
+        stage("push jar artifacts"){
+            steps {
+               withMaven {
+                  sh "cd app && mvn clean deploy"
+               } 
+
             }
         }
                    
