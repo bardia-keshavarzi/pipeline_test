@@ -69,8 +69,8 @@ pipeline{
             steps {
                 script {
                     docker.withRegistry("http://${NEXUS_URL}", 'jenkins-nexus') {
-                        def builtimage = env.BUILT_IMAGE
-                        builtimage.push()
+                       
+                        env.BUILT_IMAGE.push()
                     } 
                 }
             }
