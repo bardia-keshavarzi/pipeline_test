@@ -5,9 +5,11 @@ pipeline{
         maven 'maven-3.8'
     }
     environment {
-        IMAGE_NAME = "localhost:5000/my-app"
-        IMAGE_TAG = "${BUILD_NUMBER}"
+
         PROJECT_NAME = "test-1"
+        NEXUS_URL = 'localhost:5000'  
+        IMAGE_NAME = "${NEXUS_URL}/myapp"
+        IMAGE_TAG = "${BUILD_NUMBER}"
     }
     stages{
         stage("build java code"){
@@ -23,14 +25,7 @@ pipeline{
                 sh 'cd app && mvn clean package'    
             }
         }
-        stage('Check Docker') {
-            steps { 
-                script {
-                    echo "Docker object class: ${docker.getClass()}"
-                    sh 'whoami'
-                }
-            }
-        }
+        
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sq1') { 
@@ -50,7 +45,7 @@ pipeline{
             steps {
                 script {
                     def builtimage = docker.build("${IMAGE_NAME}:${BUILD_NUMBER}","-f Dockerfile ./app")
-                    docker.withRegistry('http://localhost:5000') {
+                    docker.withRegistry('http://${NEXUS_URL}', 'jenkins-nexus') {
                         builtimage.push()
                     } 
                 }
