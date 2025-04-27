@@ -42,7 +42,7 @@ pipeline{
 
         stage("push jar artifacts"){
             steps {
-               withMaven {
+               withMaven (mavenSettingsConfig: 'nexus-cred'){
                   sh "cd app && mvn clean deploy"
                } 
 
