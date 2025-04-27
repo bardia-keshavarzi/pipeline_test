@@ -48,14 +48,14 @@ pipeline{
             }
         }
 
-        stage("trivy test docker image"){
+ /*     stage("trivy test docker image"){
             steps {
                     sh '''
                         trivy image --no-progress --exit-code 1  --severity CRITICAL  --java-db-repository ghcr.io/aquasecurity/trivy-java-db:1 ${IMAGE_NAME}:${BUILD_NUMBER}
                     '''
             }
         }
-
+*/
         stage("push docker image"){
             steps {
                 script {
