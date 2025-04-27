@@ -52,7 +52,7 @@ pipeline{
         stage("build docker image"){
             steps {
                 script {
-                    def builtimage = docker.build("${IMAGE_NAME}:${BUILD_NUMBER}","-f Dockerfile ./app")
+                    env.BUILT_IMAGE = docker.build("${IMAGE_NAME}:${BUILD_NUMBER}","-f Dockerfile ./app")
                 }
             }
         }
@@ -69,6 +69,7 @@ pipeline{
             steps {
                 script {
                     docker.withRegistry("http://${NEXUS_URL}", 'jenkins-nexus') {
+                        def builtimage = env.BUILT_IMAGE
                         builtimage.push()
                     } 
                 }
