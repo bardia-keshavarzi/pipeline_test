@@ -15,9 +15,5 @@ spec:
       containers:
       - name: myapp
         image: 10.153.152.95:5000/myapp:35
-        command:
-          - "sh"
-          - "-c"
-          - "sleep infinity"
         ports:
         - containerPort: 8080
