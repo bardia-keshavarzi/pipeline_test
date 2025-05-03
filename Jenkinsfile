@@ -89,22 +89,25 @@ pipeline{
                 }
             }
         }
-        stage("push manifests to git"){
+        stage("push manifests to git") {
             steps {
                 script {
-                    if(params.AUTO_DEPLOY){
-                        sshagent(['jenkins-github']) {
+                    if(params.AUTO_DEPLOY) {
+                        withCredentials([sshUserPrivateKey(
+                            credentialsId: 'jenkins-github',
+                            keyFileVariable: 'SSH_KEY'
+                        )]) {
                             sh '''
                                 git config --global user.name "jenkins"
                                 git config --global user.email "jenkins@localhost"
-                                git config --global core.sshCommand "ssh -o StrictHostKeyChecking=no"
+                                git config --global core.sshCommand "ssh -i $SSH_KEY -o StrictHostKeyChecking=no"
                                 git checkout main
                                 git add manifests/deployment.yaml
                                 git commit -m "update image to ${IMAGE_NAME}:${BUILD_NUMBER}"
                                 git push origin main
                             '''
-                        }    
-                    } 
+                        }
+                    }
                 }
             }
         }
