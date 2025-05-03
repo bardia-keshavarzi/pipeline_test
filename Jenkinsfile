@@ -102,6 +102,8 @@ pipeline{
                                 git config --global user.email "jenkins@localhost"
                                 git config --global core.sshCommand "ssh -i $SSH_KEY -o StrictHostKeyChecking=no"
                                 git remote set-url origin git@github.com:bardia-keshavarzi/pipeline_test.git
+                                git fetch origin
+                                git checkout -B main origin/main
                                 git add manifests/deployment.yaml
                                 git commit -m "update image to ${IMAGE_NAME}:${BUILD_NUMBER}"
                                 git pull --rebase origin main
