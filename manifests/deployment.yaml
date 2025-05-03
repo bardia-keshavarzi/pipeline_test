@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: docker.arvancloud.ir/alpine
+        image: 10.153.152.95:5000/myapp:35
         command:
           - "sh"
           - "-c"
