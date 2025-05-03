@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: 10.153.152.95:5000/myapp:47
+        image: 10.153.152.95:5000/myapp:48
         command:
           - "sh"
           - "-c"
