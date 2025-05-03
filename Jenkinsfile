@@ -96,6 +96,7 @@ pipeline{
                     sh '''
                         git config --global user.name "jenkins"
                         git config --global user.email "jenkins@localhost"
+                        git checkout main
                         git add manifests/deployment.yaml
                         git commit -m "update image to ${IMAGE_NAME}:${BUILD_NUMBER}"
                         git push origin main
