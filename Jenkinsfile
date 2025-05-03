@@ -13,7 +13,7 @@ pipeline{
         NEXUS_URL = '10.153.152.95:5000'  
         IMAGE_NAME = "${NEXUS_URL}/myapp"
         ARGOCD_URL = '192.168.100.238:32100'
-        ARGOCD_APP = 'my-app'
+        ARGOCD_APP = 'java-helloworld'
     }
     stages{
         stage("build java code"){
