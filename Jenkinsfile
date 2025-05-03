@@ -101,7 +101,6 @@ pipeline{
                                 git config --global user.name "jenkins"
                                 git config --global user.email "jenkins@localhost"
                                 git config --global core.sshCommand "ssh -i $SSH_KEY -o StrictHostKeyChecking=no"
-                                git checkout main
                                 git add manifests/deployment.yaml
                                 git commit -m "update image to ${IMAGE_NAME}:${BUILD_NUMBER}"
                                 git push origin main
