@@ -4,11 +4,16 @@ pipeline{
         jdk 'jdk-17'
         maven 'maven-3.8'
     }
+    parameters {
+        booleanParam(name: 'AUTO_DEPLOY', defaultValue: true, description: 'deploy to k8s automatically')
+    }
     environment {
 
         PROJECT_NAME = "test-1"
-        NEXUS_URL = 'localhost:5000'  
+        NEXUS_URL = '10.153.152.95:5000'  
         IMAGE_NAME = "${NEXUS_URL}/myapp"
+        ARGOCD_URL = '192.168.100.238:32100'
+        ARGOCD_APP = 'my-app'
     }
     stages{
         stage("build java code"){
@@ -72,6 +77,46 @@ pipeline{
                     docker.withRegistry("http://${NEXUS_URL}", 'jenkins-nexus') {
                         builtimage.push()
                     } 
+                }
+            }
+        }
+        stage("update manifests"){
+            steps {
+                script {
+                    if(params.AUTO_DEPLOY){
+                        sh "sed -i 's|image:.*|image: ${IMAGE_NAME}:${BUILD_NUMBER}|' manifests/deployment.yaml"
+                    }
+                }
+            }
+        }
+        stage("push manifests to git"){
+            steps {
+                script {
+                    if(params.AUTO_DEPLOY){
+                    sh '''
+                        git config --global user.name "jenkins"
+                        git config --global user.email "jenkins@localhost"
+                        git add manifests/deployment.yaml
+                        git commit -m "update image to ${IMAGE_NAME}:${BUILD_NUMBER}"
+                        git push origin main
+                    '''
+                    } 
+                }
+            }
+        }
+        stage("trigger argo cd"){
+            steps {
+                script {
+                    if(params.AUTO_DEPLOY){
+                        withCredentials([usernamePassword(credentialsId: 'argocd-cred', passwordVariable: 'ARGOCD_PASS', usernameVariable: 'ARGOCD_USER')]) {
+                        sh '''
+                            argocd login $ARGOCD_URL --username $ARGOCD_USER --password $ARGOCD_PASS --insecure
+                            argocd app sync $ARGOCD_APP
+                            argocd app wait $ARGOCD_APP --health --sync --timeout 500
+                            argocd app get $ARGOCD_APP
+                        '''
+                        }
+                    }
                 }
             }
         }
